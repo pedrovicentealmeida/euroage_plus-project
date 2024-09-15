@@ -1,0 +1,11 @@
+string name
+int32 age
+string brain
+string hobbies
+string profession
+string family
+string theme
+string forbidden_topics
+---
+string response
+
