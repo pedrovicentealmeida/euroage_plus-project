@@ -3,6 +3,7 @@ import openai
 
 from openai import AssistantEventHandler
 from typing_extensions import override
+from std_msgs.msg import String
 from story_telling.srv import setup_story, setup_storyResponse
 from story_telling.srv import generate_response, generate_responseResponse
 
@@ -17,12 +18,19 @@ class EventHandler(AssistantEventHandler):
         self.text_final = "" 
         self.all_text = ""
         self.control = False
+        self.publisher = rospy.Publisher('story_telling_text', String, queue_size=10)
 
     @override
     def on_text_delta(self, delta, snapshot):
         """Callback function triggered on receiving text delta."""
         self.text_final += delta.value
-        print(delta.value, end="", flush=True)
+        #print(delta.value, end="", flush=True)
+        
+        # Frase a frase
+        if (delta.value in (".", "?", "!")): 
+            self.publisher.publish(self.text_final)
+            self.all_text += self.text_final
+            self.text_final = ""
 
 class StoryTelling:
     """Class to handle storytelling with OpenAI assistant."""
@@ -34,11 +42,16 @@ class StoryTelling:
 
     def new_message(self, text: str) -> None:
         """Send a new message to the OpenAI assistant."""
-        message = self.client.beta.threads.messages.create(
-            thread_id=self.thread.id,
-            role="user",
-            content=text
-        )
+        try:
+            message = self.client.beta.threads.messages.create(
+                thread_id=self.thread.id,
+                role="user",
+                content=text
+            )
+        except openai.error.OpenAIError as e:
+            rospy.logerr(f"Failed to send message: {e}")
+            raise e
+
 
     def define_parameters(self, name, age, brain, hobbies, profession, family, theme, forbidden_topics) -> None:
         """Define story parameters based on user input."""
@@ -57,10 +70,6 @@ class StoryTelling:
         ) as stream:
             stream.until_done()
         
-        while True:
-            if not event_handler.control:
-                break
-
         event_handler.all_text += event_handler.text_final
         return event_handler.all_text
 
