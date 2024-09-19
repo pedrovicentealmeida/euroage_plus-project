@@ -22,7 +22,7 @@ speech_config = speechsdk.SpeechConfig(subscription="43afa09c9aff4cc183a2c646226
 
 # Google Speech Configuration
 try:
-    client = texttospeech.TextToSpeechClient.from_service_account_json('/home/pedroalmeida/Desktop/modo_narrativa_final/robot/talkingrobot-at-isr-uc-9d5d6cc254a8.json')
+    client = texttospeech.TextToSpeechClient()
 except Exception as e:
     rospy.logerr(f"Error initializing TextToSpeechClient: {e}")
 

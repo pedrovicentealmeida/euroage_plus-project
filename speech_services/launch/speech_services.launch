@@ -1,0 +1,7 @@
+<launch>
+    <node pkg="speech_services" type="stt_service.py" name="stt_service_node" output="screen">
+    </node>
+    <node pkg="speech_services" type="tts_service.py" name="tts_services_node" output="screen">
+    </node>
+</launch>
+

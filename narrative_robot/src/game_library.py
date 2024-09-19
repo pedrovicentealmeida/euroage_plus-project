@@ -59,6 +59,7 @@ class StoryTelling:
         stt_response = self.call_stt_service()
         if stt_response:
             self.call_new_message_service(stt_response.text)
+            return stt_response.text
 
     def call_stt_service(self):
         """Call the STT service and return the response."""
@@ -107,6 +108,7 @@ class StoryTelling:
             rospy.loginfo("Requesting a response from the assistant...")
             response = obtain_response_client(obtain_responseRequest())
             self.queue_empty_event.wait()
+            return response.output_text
             #rospy.loginfo(f"Response from assistant: {response.output_text}")
         except rospy.ServiceException as e:
             rospy.logerr(f"Obtain response service call failed: {e}")
