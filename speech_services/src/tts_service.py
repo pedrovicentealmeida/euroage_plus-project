@@ -164,7 +164,7 @@ def handle_tts_eleven(req):
     """
     try:
         eleven_tts(req.text)
-        rospy.loginfo(f"TTS Eleven - Text: {req.text}")
+        #rospy.loginfo(f"TTS Eleven - Text: {req.text}")
         return tts_elevenResponse(success=True)
     except Exception as e:
         rospy.logerr(f"Error in TTS service (Eleven): {e}")
@@ -176,7 +176,7 @@ def handle_tts_google(req):
     """
     try:
         google_tts(req.text, req.language)
-        rospy.loginfo(f"TTS Google - Text: {req.text} | Language: {req.language}")
+        #rospy.loginfo(f"TTS Google - Text: {req.text} | Language: {req.language}")
         return tts_googleResponse(success=True)
     except Exception as e:
         rospy.logerr(f"Error in TTS service (Google): {e}")
@@ -188,7 +188,7 @@ def handle_tts_microsoft(req):
     """
     try:
         microsoft_tts(req.text, req.language, req.rate)
-        rospy.loginfo(f"TTS Microsoft - Text: {req.text} | Language: {req.language} | Rate: {req.rate}")
+        #rospy.loginfo(f"TTS Microsoft - Text: {req.text} | Language: {req.language} | Rate: {req.rate}")
         return tts_microsoftResponse(success=True)
     except Exception as e:
         rospy.logerr(f"Error in TTS service (Microsoft): {e}")

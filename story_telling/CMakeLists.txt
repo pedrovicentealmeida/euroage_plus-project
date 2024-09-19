@@ -56,7 +56,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   setup_story.srv
-  generate_response.srv
+  new_message.srv
+  obtain_response.srv
 )
 
 ## Generate actions in the 'action' folder

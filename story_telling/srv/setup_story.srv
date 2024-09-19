@@ -7,5 +7,5 @@ string family
 string theme
 string forbidden_topics
 ---
-string response
+bool success
 

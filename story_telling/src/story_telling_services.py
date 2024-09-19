@@ -4,8 +4,10 @@ import openai
 from openai import AssistantEventHandler
 from typing_extensions import override
 from std_msgs.msg import String
+
 from story_telling.srv import setup_story, setup_storyResponse
-from story_telling.srv import generate_response, generate_responseResponse
+from story_telling.srv import new_message, new_messageResponse
+from story_telling.srv import obtain_response, obtain_responseResponse
 
 st = None
 
@@ -76,16 +78,17 @@ class StoryTelling:
 def handle_setup_story(req):
     """Callback for the setup_story service."""
     st.define_parameters(req.name, req.age, req.brain, req.hobbies, req.profession, req.family, req.theme, req.forbidden_topics)
-    initial_response = st.obtain_response()
-    
-    return setup_storyResponse(response=initial_response)
+    return setup_storyResponse(success=True)
 
-def handle_generate_response(req):
-    """Callback for the generate_response service."""
+def handle_new_message(req):
+    """Callback for the new_message service."""
     st.new_message(req.input_text)
+    return new_messageResponse(success=True)
+
+def handle_obtain_response(req):
+    """Callback for the obtain_response service."""
     response_text = st.obtain_response()
-    
-    return generate_responseResponse(output_text=response_text)
+    return obtain_responseResponse(output_text=response_text)
 
 def main():
     
@@ -96,7 +99,8 @@ def main():
     st = StoryTelling()
     
     rospy.Service('setup_story', setup_story, handle_setup_story)
-    rospy.Service('generate_response', generate_response, handle_generate_response)
+    rospy.Service('new_message', new_message, handle_new_message)
+    rospy.Service('obtain_response', obtain_response, handle_obtain_response)
     
     rospy.loginfo("Story Telling services ready to use.")
     rospy.spin()
