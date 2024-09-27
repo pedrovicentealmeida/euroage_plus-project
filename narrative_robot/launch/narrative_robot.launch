@@ -1,6 +1,0 @@
-<launch>
-    <include file="$(find speech_services)/launch/speech_services.launch" />
-    <include file="$(find story_telling)/launch/story_telling.launch" />
-    <node pkg="narrative_robot" type="robot.py" name="narrative_robot_node" output="screen" />
-</launch>
-

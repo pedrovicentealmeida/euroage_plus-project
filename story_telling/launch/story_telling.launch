@@ -1,5 +1,0 @@
-<launch>
-    <node pkg="story_telling" type="story_telling_services.py" name="story_telling_node" output="screen">
-    </node>
-</launch>
-

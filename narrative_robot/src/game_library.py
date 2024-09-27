@@ -1,53 +1,62 @@
-import rospy
+import rclpy
+from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
 import queue
 import threading
 from std_msgs.msg import String
 
-from speech_services.srv import tts_microsoft, tts_microsoftRequest, stt, sttRequest
-from story_telling.srv import setup_story, setup_storyRequest, new_message, new_messageRequest, obtain_response, obtain_responseRequest
+from speech_services.srv import TtsMicrosoft, Stt
+from story_telling.srv import NewMessage, SetupStory, ObtainResponse
 
-class StoryTelling:
+
+class StoryTelling(Node):
     """Class to handle storytelling with OpenAI assistant."""
 
     def __init__(self):
         """Initialize the StoryTelling class."""
+        super().__init__('story_telling_interactive_node')
         self.synthesize_queue = queue.Queue()
         self.queue_empty_event = threading.Event()
         self.synthesize_thread = threading.Thread(target=self.synthesize_text)
         self.synthesize_thread.daemon = True
         self.synthesize_thread.start()
 
-        rospy.init_node('story_telling_interactive_node', anonymous=True)
-        rospy.Subscriber('story_telling_text', String, self.story_callback)
-        rospy.on_shutdown(self.shutdown_hook)
-        #rospy.loginfo("Subscribed to 'story_telling_text' topic.")
+        # Subscription to the 'story_telling_text' topic
+        self.create_subscription(String, 'story_telling_text', self.story_callback, 10)
+
+        # Registering a shutdown hook
+        self.add_on_shutdown(self.shutdown_hook)
 
     def synthesize_text(self):
         """Thread method to process text-to-speech requests."""
-        rospy.wait_for_service('tts_microsoft')
-        try:
-            tts_client = rospy.ServiceProxy('tts_microsoft', tts_microsoft)
-            while not rospy.is_shutdown():
-                try:
-                    text = self.synthesize_queue.get(timeout=1)
-                    if text is None:
-                        break
+        self.get_logger().info("Waiting for TTS service...")
+        self.wait_for_service('tts_microsoft')
+        tts_client = self.create_client(TtsMicrosoft, 'tts_microsoft')
 
-                    tts_req = tts_microsoftRequest(text=text, language="pt-PT", rate="0")
-                    rospy.loginfo(f"Synthesizing speech: {text}")
-                    tts_client(tts_req)
-                    self.synthesize_queue.task_done()
+        while rclpy.ok():
+            try:
+                text = self.synthesize_queue.get(timeout=1)
+                if text is None:
+                    break
 
-                    if self.synthesize_queue.empty():
-                        self.queue_empty_event.set()
+                request = TtsMicrosoft.Request()
+                request.text = text
+                request.language = "pt-PT"
+                request.rate = "0"
+                self.get_logger().info(f"Synthesizing speech: {text}")
 
-                except queue.Empty:
-                    continue
+                future = tts_client.call_async(request)
+                rclpy.spin_until_future_complete(self, future)
 
-        except rospy.ServiceException as e:
-            rospy.logerr(f"TTS service call failed: {e}")
-        except Exception as e:
-            rospy.logerr(f"Unexpected error in synthesize_text: {e}")
+                self.synthesize_queue.task_done()
+
+                if self.synthesize_queue.empty():
+                    self.queue_empty_event.set()
+
+            except queue.Empty:
+                continue
+            except Exception as e:
+                self.get_logger().error(f"Unexpected error in synthesize_text: {e}")
 
     def story_callback(self, msg):
         """Callback function that gets called whenever a message is published on the topic."""
@@ -63,66 +72,81 @@ class StoryTelling:
 
     def call_stt_service(self):
         """Call the STT service and return the response."""
-        rospy.wait_for_service('stt_service')
-        try:
-            stt_client = rospy.ServiceProxy('stt_service', stt)
-            req = sttRequest(language="pt-PT")
-            rospy.loginfo("Requesting speech-to-text...")
-            return stt_client(req)
-        except rospy.ServiceException as e:
-            rospy.logerr(f"STT service call failed: {e}")
-            return None
+        self.wait_for_service('stt_service')
+        stt_client = self.create_client(Stt, 'stt_service')
+        request = Stt.Request()
+        request.language = "pt-PT"
+        self.get_logger().info("Requesting speech-to-text...")
+
+        future = stt_client.call_async(request)
+        rclpy.spin_until_future_complete(self, future)
+        return future.result()
 
     def call_new_message_service(self, text):
         """Call the new_message service with the provided text."""
-        rospy.wait_for_service('new_message')
-        try:
-            new_message_client = rospy.ServiceProxy('new_message', new_message)
-            req = new_messageRequest(input_text=text)
-            #rospy.loginfo(f"Sending new message: {text}")
-            response = new_message_client(req)
-            rospy.loginfo(f"New message service response: {response}")
-        except rospy.ServiceException as e:
-            rospy.logerr(f"New message service call failed: {e}")
+        self.wait_for_service('new_message')
+        new_message_client = self.create_client(NewMessage, 'new_message')
+        request = NewMessage.Request()
+        request.input_text = text
+
+        future = new_message_client.call_async(request)
+        rclpy.spin_until_future_complete(self, future)
+        self.get_logger().info(f"New message service response: {future.result()}")
 
     def define_parameters(self, name, age, brain, hobbies, profession, family, theme, forbidden_topics):
         """Define story parameters by calling the setup_story service."""
-        rospy.wait_for_service('setup_story')
-        try:
-            setup_story_client = rospy.ServiceProxy('setup_story', setup_story)
-            req = setup_storyRequest(
-                name=name, age=age, brain=brain, hobbies=hobbies,
-                profession=profession, family=family, theme=theme,
-                forbidden_topics=forbidden_topics
-            )
-            response = setup_story_client(req)
-            rospy.loginfo(f"Parameters defined successfully: {response}")
-        except rospy.ServiceException as e:
-            rospy.logerr(f"Setup story service call failed: {e}")
+        self.wait_for_service('setup_story')
+        setup_story_client = self.create_client(SetupStory, 'setup_story')
+        request = SetupStory.Request(
+            name=name,
+            age=age,
+            brain=brain,
+            hobbies=hobbies,
+            profession=profession,
+            family=family,
+            theme=theme,
+            forbidden_topics=forbidden_topics
+        )
+
+        future = setup_story_client.call_async(request)
+        rclpy.spin_until_future_complete(self, future)
+        self.get_logger().info(f"Parameters defined successfully: {future.result()}")
 
     def obtain_response(self):
         """Obtain response from the OpenAI assistant."""
-        rospy.wait_for_service('obtain_response')
-        try:
-            obtain_response_client = rospy.ServiceProxy('obtain_response', obtain_response)
-            rospy.loginfo("Requesting a response from the assistant...")
-            response = obtain_response_client(obtain_responseRequest())
-            self.queue_empty_event.wait()
-            return response.output_text
-            #rospy.loginfo(f"Response from assistant: {response.output_text}")
-        except rospy.ServiceException as e:
-            rospy.logerr(f"Obtain response service call failed: {e}")
+        self.wait_for_service('obtain_response')
+        obtain_response_client = self.create_client(ObtainResponse, 'obtain_response')
+
+        self.get_logger().info("Requesting a response from the assistant...")
+        future = obtain_response_client.call_async(ObtainResponse.Request())
+        rclpy.spin_until_future_complete(self, future)
+        self.queue_empty_event.wait()
+        return future.result().output_text
 
     def shutdown_hook(self):
         """Clean up resources on shutdown."""
-        rospy.loginfo("Shutting down StoryTelling node...")
+        self.get_logger().info("Shutting down StoryTelling node...")
         self.synthesize_queue.put(None)
         self.synthesize_thread.join() 
-        rospy.loginfo("StoryTelling node shut down successfully.")
+        self.get_logger().info("StoryTelling node shut down successfully.")
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    storytelling = StoryTelling()
+
+    executor = MultiThreadedExecutor()
+    executor.add_node(storytelling)
+
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        executor.shutdown()
+        storytelling.destroy_node()
+        rclpy.shutdown()
+
 
 if __name__ == "__main__":
-    try:
-        storytelling = StoryTelling()
-        rospy.spin()
-    except rospy.ROSInterruptException:
-        pass
+    main()

@@ -1,59 +1,54 @@
-import rospy
+#!/usr/bin/env python3
+
+import rclpy
+from rclpy.node import Node
 import openai
-
-from openai import AssistantEventHandler
-from typing_extensions import override
 from std_msgs.msg import String
+from story_telling.srv import SetupStory, NewMessage, ObtainResponse
 
-from story_telling.srv import setup_story, setup_storyResponse
-from story_telling.srv import new_message, new_messageResponse
-from story_telling.srv import obtain_response, obtain_responseResponse
-
-st = None
-
-class EventHandler(AssistantEventHandler):
+class EventHandler(openai.AssistantEventHandler):
     """Custom event handler for OpenAI assistant events."""
-    
-    def __init__(self):
-        """Initialize the event handler."""
+
+    def __init__(self, node):
+        """Initialize the event handler with a ROS2 node."""
         super().__init__()
-        self.text_final = "" 
+        self.text_final = ""
         self.all_text = ""
         self.control = False
-        self.publisher = rospy.Publisher('story_telling_text', String, queue_size=10)
+        self.publisher = node.create_publisher(String, 'story_telling_text', 10)
 
-    @override
     def on_text_delta(self, delta, snapshot):
         """Callback function triggered on receiving text delta."""
         self.text_final += delta.value
-        #print(delta.value, end="", flush=True)
-        
-        # Frase a frase
-        if (delta.value in (".", "?", "!")): 
-            self.publisher.publish(self.text_final)
+
+        # Publish sentence by sentence
+        if delta.value in (".", "?", "!"):
+            msg = String()
+            msg.data = self.text_final
+            self.publisher.publish(msg)
             self.all_text += self.text_final
             self.text_final = ""
+
 
 class StoryTelling:
     """Class to handle storytelling with OpenAI assistant."""
 
-    def __init__(self):
+    def __init__(self, node):
         """Initialize the StoryTelling class."""
+        self.node = node  # Save the node reference
         self.client = openai.OpenAI(api_key="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")
         self.thread = self.client.beta.threads.create()
 
     def new_message(self, text: str) -> None:
         """Send a new message to the OpenAI assistant."""
         try:
-            message = self.client.beta.threads.messages.create(
+            self.client.beta.threads.messages.create(
                 thread_id=self.thread.id,
                 role="user",
                 content=text
             )
         except openai.error.OpenAIError as e:
-            rospy.logerr(f"Failed to send message: {e}")
             raise e
-
 
     def define_parameters(self, name, age, brain, hobbies, profession, family, theme, forbidden_topics) -> None:
         """Define story parameters based on user input."""
@@ -64,46 +59,59 @@ class StoryTelling:
 
     def obtain_response(self) -> str:
         """Obtain response from the OpenAI assistant."""
-        event_handler = EventHandler()
-        with self.client.beta.threads.runs.create_and_stream(
+        event_handler = EventHandler(self.node)  # Pass the node here
+        with self.client.beta.threads.runs.stream(
             thread_id=self.thread.id,
             assistant_id="asst_SnlrOiiPlAvoLztLBsMGRNiO",
             event_handler=event_handler,
         ) as stream:
             stream.until_done()
-        
+
         event_handler.all_text += event_handler.text_final
         return event_handler.all_text
 
-def handle_setup_story(req):
-    """Callback for the setup_story service."""
-    st.define_parameters(req.name, req.age, req.brain, req.hobbies, req.profession, req.family, req.theme, req.forbidden_topics)
-    return setup_storyResponse(success=True)
 
-def handle_new_message(req):
-    """Callback for the new_message service."""
-    st.new_message(req.input_text)
-    return new_messageResponse(success=True)
 
-def handle_obtain_response(req):
-    """Callback for the obtain_response service."""
-    response_text = st.obtain_response()
-    return obtain_responseResponse(output_text=response_text)
+class StoryTellingNode(Node):
+    """ROS2 Node to handle storytelling services."""
 
-def main():
-    
-    global st
-    
-    rospy.init_node('story_telling_node')
-    
-    st = StoryTelling()
-    
-    rospy.Service('setup_story', setup_story, handle_setup_story)
-    rospy.Service('new_message', new_message, handle_new_message)
-    rospy.Service('obtain_response', obtain_response, handle_obtain_response)
-    
-    rospy.loginfo("Story Telling services ready to use.")
-    rospy.spin()
+    def __init__(self):
+        super().__init__('story_telling_node')
+
+        self.st = StoryTelling(self)  # Pass the node to StoryTelling
+
+        # Define services
+        self.srv_setup_story = self.create_service(SetupStory, 'setup_story', self.handle_setup_story)
+        self.srv_new_message = self.create_service(NewMessage, 'new_message', self.handle_new_message)
+        self.srv_obtain_response = self.create_service(ObtainResponse, 'obtain_response', self.handle_obtain_response)
+
+        self.get_logger().info("Story Telling services are ready.")
+
+    def handle_setup_story(self, req, res):
+        """Callback for the setup_story service."""
+        self.st.define_parameters(req.name, req.age, req.brain, req.hobbies, req.profession, req.family, req.theme, req.forbidden_topics)
+        res.success = True
+        return res
+
+    def handle_new_message(self, req, res):
+        """Callback for the new_message service."""
+        self.st.new_message(req.input_text)
+        res.success = True
+        return res
+
+    def handle_obtain_response(self, req, res):
+        """Callback for the obtain_response service."""
+        response_text = self.st.obtain_response()
+        res.output_text = response_text
+        return res
+
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = StoryTellingNode()
+    rclpy.spin(node)
+    rclpy.shutdown()
+
 
 if __name__ == "__main__":
     main()

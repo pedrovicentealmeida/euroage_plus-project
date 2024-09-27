@@ -5,13 +5,15 @@
   <description>Package providing ROS services to synthesize text into speech using different Text-to-Speech (TTS) service providers.</description>
 
   <maintainer email="pedro.almeida@isr.uc.pt">Pedro Vicente Almeida</maintainer>
-  <license>BSD</license>
+  <license>TODO</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>rosidl_default_generators</buildtool_depend>
   
   <depend>rclpy</depend>
   <depend>std_msgs</depend>
+  
+  <exec_depend>ros2launch</exec_depend>
 
   <test_depend>ament_cmake_pytest</test_depend>
   
