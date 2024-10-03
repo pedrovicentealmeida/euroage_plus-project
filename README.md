@@ -4,6 +4,7 @@
   <img src="https://euroageplus.unex.es/wp-content/uploads/2023/11/logo-euroageplus-uai-516x140.png" alt="Logo Euroage Plus">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <img src="https://github.com/user-attachments/assets/79b1cfa2-7d07-4cf5-a753-731de974b14e" alt="Noetic Jazzy" style="width: 289px;">
+  </div>
 
 ## Description
 This repository contains all the resources related to the serious game developed for the Euroage+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy version of the Robot Operating System (ROS) 2. The project was migrated from the ros_noetic branch to ensure compatibility with this version in ROS.
