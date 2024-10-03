@@ -90,7 +90,7 @@ class TTSServiceNode(Node):
             audio_config=audio_config
         )
 
-        self.analyze_audio_energy(np.frombuffer(response.audio_content[44:], dtype=np.int16), 16000, language)
+        self.analyze_audio_energy(response.audio_content[44:], 16000, language)
 
     def microsoft_tts(self, text: str, language: str, rate: str) -> None:
         """
@@ -137,10 +137,15 @@ class TTSServiceNode(Node):
         energy_limits = [1, 30, 100] if sample_rate == 44100 else [10, 25, 50] if language == "en-US" else [15, 40, 100]
         hop_length = 1024 if sample_rate == 44100 else 512
 
+        if sample_rate == 44100:
+            audio_array_normalized = audio_data.astype(np.float32)/np.max(np.abs(audio_data))
+
+        else:
+            audio_array_decoded = np.frombuffer(audio_data, dtype=np.int16)
+            audio_array_normalized = audio_array_decoded/np.max(np.abs(audio_array_decoded))
+
         audio_thread = threading.Thread(target=self.play_audio, args=(audio_data, sample_rate))
         audio_thread.start()
-
-        audio_array_normalized = audio_data.astype(np.float32) / np.max(np.abs(audio_data))
 
         previous_viseme = None
         for i in range(0, len(audio_array_normalized) - frame_length, hop_length):
@@ -168,7 +173,12 @@ class TTSServiceNode(Node):
         """
         p = pyaudio.PyAudio()
         stream = p.open(format=pyaudio.paInt16, channels=1, rate=rate, output=True)
-        stream.write(audio_array.astype(np.int16).tobytes())
+        
+        if rate == 44100:
+            stream.write(audio_array.astype(np.int16).tobytes())
+        else:
+            stream.write(audio_array)
+            
         stream.close()
         p.terminate()
 

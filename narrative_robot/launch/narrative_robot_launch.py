@@ -5,6 +5,11 @@ from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..', 'lib/narrative_robot')))
+from game_library import StoryTelling
+
 def generate_launch_description():
     return LaunchDescription([
         IncludeLaunchDescription(

@@ -9,13 +9,9 @@ find_package(rosidl_default_generators REQUIRED)
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME})
 
-install(FILES
-  src/game_library.py
-  DESTINATION lib/${PROJECT_NAME}
-)
-
 install(PROGRAMS
   src/robot.py
+  src/game_library.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

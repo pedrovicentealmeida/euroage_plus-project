@@ -3,10 +3,9 @@
 import socket
 import threading
 import time
-import sys
-import os
+import rclpy
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+rclpy.init(args=None)
 from game_library import StoryTelling
 
 ST = StoryTelling()
@@ -48,18 +47,19 @@ def start_connection_commands():
 def send_client(text):
     global client_socket_text
     client_socket_text.sendall(text.encode())
-    client_socket_text.recv(5) # Confirmação de chegada
+    print(client_socket_text.recv(5))
 
 def receive_client():
     global client_socket_text
     data = client_socket_text.recv(1024).decode()
+    print(data)
     client_socket_text.sendall("-".encode())
     return (data) 
 
 def receive_client_commands():
     global client_socket_commands
     data = client_socket_commands.recv(1024).decode()
-    #print(data)
+    print(data)
     client_socket_commands.sendall("-".encode())
     return (data) 
   
@@ -146,23 +146,30 @@ def new_story():
                 break
   
 def main():
+
     global client_socket_text
     global client_socket_commands
     
-    while True:
-        client_socket_text = start_connection_text()
-        client_socket_commands = start_connection_commands()
-
+    try:
         while True:
-            number_root = receive_client()
-            #print(number_root)
-            
-            if number_root == "500":
-                new_story()
-            elif number_root == "CLOSE":
-                client_socket_text.close()
-                client_socket_commands.close()
-                break
+            client_socket_text = start_connection_text()
+            client_socket_commands = start_connection_commands()
+
+            while True:
+                number_root = receive_client()
+                print(number_root)
+                
+                if number_root == "500":
+                    new_story()
+                elif number_root == "CLOSE":
+                    client_socket_text.close()
+                    client_socket_commands.close()
+                    break
+    finally:
+        # Cleanup on exit
+        ST.shutdown_hook()
+        ST.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == "__main__":
     main()
