@@ -7,7 +7,7 @@
 </div>
 
 ## Description
-This repository contains all the resources related to the serious game developed for the Euroage+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Noetic version of the Robot Operating System (ROS). The previously developed code has been refactored to enhance usability and overall performance.
+This repository contains all the resources related to the serious game developed for the Euroage+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy version of the Robot Operating System (ROS) 2. The project was migrated from the ros_noetic branch to ensure compatibility with this version in ROS.
 
 ## Table of Contents
 - [Organization](#organization)
@@ -43,7 +43,7 @@ Assuming you have installed all the dependencies and tested everything correctly
 1. **Launch the Narrative Robot Node**:
    * Open a terminal, navigate to your ROS workspace directory, and run the following command:
    ```bash
-   roslaunch narrative_robot narrative_robot.launch
+   ros2 launch narrative_robot narrative_robot.launch
 
 2. **Run the Therapist Interface**:
    * In a new terminal, navigate to the server directory and execute:
