@@ -2,7 +2,7 @@
 
 <div align="center">
   <img src="https://euroageplus.unex.es/wp-content/uploads/2023/11/logo-euroageplus-uai-516x140.png" alt="Logo Euroage Plus">
-  &nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;
   <img src="https://github.com/user-attachments/assets/79b1cfa2-7d07-4cf5-a753-731de974b14e" alt="ROS Jazzy" style="width: 289px;">
 </div>
 
