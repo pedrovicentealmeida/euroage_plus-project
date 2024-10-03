@@ -1,8 +1,10 @@
-# euroage_plus-project
+# Euroage+ Project - ROS Noetic Version
 
-<p align="center">
+<div align="center">
   <img src="https://euroageplus.unex.es/wp-content/uploads/2023/11/logo-euroageplus-uai-516x140.png" alt="Logo Euroage Plus">
-</p>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="https://robocademy.com/wp-content/uploads/2020/05/ros_noetic_logo1-1024x601-1.png" alt="Noetic Version" style="width: 240px;">
+</div>
 
 ## Description
 This repository contains all the resources related to the serious game developed for the Euroage+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Noetic version of the Robot Operating System (ROS). The previously developed code has been refactored to enhance usability and overall performance.
