@@ -2,7 +2,7 @@
 <package format="3">
   <name>speech_services</name>
   <version>0.0.1</version>
-  <description>Package providing ROS services to synthesize text into speech using different Text-to-Speech (TTS) service providers.</description>
+  <description>Package providing ROS services to synthesize text into speech using different Text-to-Speech (TTS) service providers and convert Speech-to-Text (STT).</description>
 
   <maintainer email="pedro.almeida@isr.uc.pt">Pedro Vicente Almeida</maintainer>
   <license>TODO</license>
