@@ -1,33 +1,35 @@
-# `speech_services`
+# `speech_services` ROS 2 Package
 
 ## Package Description
-The `speech_services` ROS 2 package provides a robust node for speech synthesis and recognition tailored for robotic applications. This package encompasses a range of server implementations that leverage advanced third-party text-to-speech (TTS) and speech-to-text (STT) technologies. By doing so, it allows developers to seamlessly integrate sophisticated voice capabilities into their robotic systems. Moreover, through STT, the robot can accurately transcribe spoken language, enhancing interactive communication with users.
+The `speech_services` package provides a versatile and efficient solution for speech synthesis (TTS) and speech recognition (STT) within ROS 2 systems. By integrating advanced third-party services such as Microsoft Azure, Google Cloud, and Eleven Labs, this package enables robots to perform dynamic speech interactions, enhancing communication and user experience. Additionally, the package supports lip-sync capabilities, aligning synthesized speech with realistic visual feedback for more engaging and human-like interactions.
+
+## Key Features
 
 ### Lip-Sync Capabilities
 
-The `speech_services` package provides advanced lip-sync functionalities for text-to-speech (TTS) services, significantly enhancing the realism of synthesized speech interactions.
-
-- **Microsoft TTS**: This service achieves lip synchronization by mapping visemes—visual representations of phonemes—to their corresponding phonetic sounds using the Microsoft Azure API. This methodology ensures that the visual depiction of speech aligns closely with the spoken output, resulting in a more natural and engaging interaction.
-
-- **Google TTS and Eleven Labs**: Both services implement lip synchronization by assigning visemes based on energy calculations over audio frames. This technique facilitates dynamic alignment between the generated speech and the visual cues.
-
-## Features
+The package offers cutting-edge lip-sync features that synchronize mouth movements with generated speech for more natural robotic communication:
+- **Microsoft TTS**: Uses Microsoft Azure's API to map phonetic sounds to visemes (visual representations of phonemes). This allows speech and mouth movements to be tightly synchronized, providing a more natural and engaging interaction.
+- **Google TTS & Eleven Labs**: These services achieve lip-sync by calculating energy levels in audio frames. This approach dynamically aligns the generated speech with corresponding visual cues.
 
 ### Service Interfaces
-The package defines four service interfaces (`srv`) designed for TTS and STT functionalities:
-- **TtsEleven**: Generates speech from text using the Eleven Labs API.
-- **TtsGoogle**: Converts text to speech utilizing Google Text-to-Speech services.
-- **TtsMicrosoft**: Produces speech from text via Microsoft Azure's TTS capabilities.
-- **Stt**: Transforms spoken language into text, leveraging Microsoft Azure's Speech-to-Text technology.
 
-### Python Implementation
-All services are implemented in Python, making them accessible and straightforward to extend for developers familiar with the language. The package includes two primary programs:
+The package provides four service interfaces (`srv`) to support text-to-speech (TTS) and speech-to-text (STT) functionalities:
+
+- **TtsEleven**: Converts text to speech using the Eleven Labs API.
+- **TtsGoogle**: Converts text to speech using the Google Text-to-Speech API.
+- **TtsMicrosoft**: Converts text to speech using Microsoft Azure's TTS API.
+- **Stt**: Transcribes spoken language into text using Microsoft Azure's Speech-to-Text services.
+
+### Python-Based Implementation
+
+All services in the package are implemented in Python, making it easy for developers to extend and integrate these functionalities into their ROS 2 projects. The two main programs are:
 - `tts_service.py`: Manages text-to-speech requests.
-- `stt_service.py`: Handles speech-to-text requests.
+- `stt_service.py`: Manages speech-to-text requests.
 
 ### Launch File Support
-The package supports launch file integration, facilitating easy deployment of services within ROS 2 applications:
-- **`speech_services_launch.py`**: This launch file enables the simultaneous start of both STT and TTS services, allowing usage via terminal commands or scripts in the respective format.
+
+A convenient launch file is included to facilitate the simultaneous launch of both TTS and STT services:
+- **`speech_services_launch.py`**: This file allows users to start all necessary services at once, simplifying deployment in ROS 2 applications.
 
 ## Dependencies
 
@@ -46,22 +48,104 @@ Additionally, this package relies on the following non-standard Python libraries
 - **`pyaudio`**: Supports audio output, enabling real-time audio processing.
 - **`pydub`**: Facilitates audio manipulation and processing, including conversion and editing.
 
-
 ## Installation Instructions
 To install the `speech_services` package, follow these steps...
 
+## Service Parameters
+### TtsMicrosoft 
+The `TtsMicrosoft` service accepts the following parameters:
+- `text` (string): Text to convert to speech.
+- `language` (string): Language of the speech (e.g., 'en-US').
+- `rate` (string): Speed of the speech (e.g., '0', '10').
+
+### TtsGoogle
+The `TtsGoogle` service accepts the following parameters:
+- `text` (string): Text to convert to speech.
+- `language` (string): Language of the speech (e.g., 'pt-PT').
+
+### TtsEleven
+The `TtsEleven` service accepts the following parameters:
+- `text` (string): text to convert to speech.
+
+### Stt (Speech-to-Text)
+The Stt service accepts the following parameters:
+- `language` (string): Language of the speech to recognize (e.g., 'en-US').
+
 ## Usage Examples
-### Text-to-Speech Example
-...
+
+### Example Usage - Script:
+```python
+from speech_services.srv import TtsMicrosoft
+import rclpy
+
+def tts_example():
+    rclpy.init()
+    node = rclpy.create_node('tts_example_node')
+    client = node.create_client(TtsMicrosoft, 'tts_microsoft')
+
+    request = TtsMicrosoft.Request()
+    request.text = "Hello, how are you?"
+    request.language = "en-US"
+    request.rate = "0"
+
+    future = client.call_async(request)
+    rclpy.spin_until_future_complete(node, future)
+
+    if future.result() is not None:
+        print("Speech synthesis succeeded!")
+    else:
+        print("Failed to generate speech.")
+    
+    node.destroy_node()
+    rclpy.shutdown()
+```
 
 ### Speech-to-Text Example
-....
+```python
+from speech_services.srv import Stt
+import rclpy
+
+def stt_example():
+    rclpy.init()
+    node = rclpy.create_node('stt_example_node')
+    client = node.create_client(Stt, 'stt_service')
+
+    request = Stt.Request()
+    request.language = "en-US"
+
+    future = client.call_async(request)
+    rclpy.spin_until_future_complete(node, future)
+
+    if future.result() is not None:
+        print(f"Recognized text: {future.result().text}")
+    else:
+        print("Failed to transcribe speech.")
+    
+    node.destroy_node()
+    rclpy.shutdown()
+```
 
 ## Testing Instructions
-...
+You can test the services using ROS 2 terminal commands. For example, to test the Microsoft TTS service:
 
-## Contact
-....
+```bash
+ros2 service call /tts_microsoft speech_services/srv/TtsMicrosoft '{text: "your-text", language: "pt-PT or en-US", rate: 0 or 10}'
+```
+Replace "your-text" with the text you want to convert to speech. You can also change the language to "en-US" or other supported language codes, and adjust the rate to control the speed of the speech ("0" for normal speed, "10" for faster, etc.).
+
+In case of STT you just need to run the following command:
+```bash
+ros2 service call /stt_service speech_services/srv/Stt '{language: "language"}'
+```
+You can adjust the language parameter to match the language of the speech you want to transcribe, such as "en-US" for English or "pt-PT" for Portuguese.
 
 ## Acknowledgments
-.....
+
+Special thanks to:
+- **Prof. Doutor Rui P. Rocha** for his continuous guidance, support, and motivation throughout this project.
+- **Prof. Doutor Fernando Perdigão** for his valuable insights into audio processing and signal analysis, which made the lip synchronization features of this package possible.
+
+
+## Contact
+
+For any issues or further inquiries, feel free to contact the package maintainers at pedro.almeida@isr.uc.pt.
