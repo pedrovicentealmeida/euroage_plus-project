@@ -7,7 +7,7 @@
 </div>
 
 ## Description
-This repository contains all the resources related to the serious game developed for the Euroage+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy version of the Robot Operating System (ROS) 2. The project was migrated from the ros_noetic branch to ensure compatibility with this version in ROS.
+This repository contains all the resources related to the serious game developed for the EuroAGE+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy version of the Robot Operating System (ROS) 2. The project was migrated from the ros_noetic branch to ensure compatibility with this version in ROS.
 
 ## Table of Contents
 - [Organization](#organization)
