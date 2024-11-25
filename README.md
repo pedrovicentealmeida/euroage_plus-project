@@ -1,4 +1,4 @@
-# Euroage+ Project - ROS Jazzy Distribution
+# EuroAGE+ Project - ROS Jazzy Distribution
 
 <div align="center">
   <img src="https://euroageplus.unex.es/wp-content/uploads/2023/11/logo-euroageplus-uai-516x140.png" alt="Logo Euroage Plus">
@@ -7,7 +7,7 @@
 </div>
 
 ## Description
-This repository contains all the resources related to the serious game developed for the EuroAGE+ project, which was a key component of my thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy version of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this version in ROS.
+This repository contains all the resources related to the serious game developed for the EuroAGE+ project, which was a key component of my MSc thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy distribution of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this distribution of ROS.
 
 ## Table of Contents
 - [Organization](#organization)
@@ -22,13 +22,13 @@ This repository is organized into four main folders, each playing an essential r
    This folder contains two subfolders related to the therapist's interface: one for the server and another for the client. Together, they allow the therapist's interface to run, retrieving patient data stored in a pre-populated database.
 
 2. **`narrative_robot`**:
-   This folder contains a ROS package that acts as a bridge between the speech_services and story_telling packages. It also manages the robot entity, ensuring seamless communication with the therapist's interface.
+   This folder contains a ROS package that acts as a bridge between the `speech_services` and `story_telling` packages. It also manages the robot entity, ensuring seamless communication with the therapist's interface.
 
 3. **`speech_services`**:
-   The speech_services package includes all services related to speech synthesis and voice recognition. Through ROS services, the robot can convert text to speech and transcribe speech to text.
+   The `speech_services` package includes all services related to speech synthesis and voice recognition. Through ROS services, the robot can convert text to speech and transcribe speech to text.
 
 4. **`story_telling`**:
-   The story_telling package facilitates communication with the OpenAI assistant, enabling narrative management. It handles receiving responses from the assistant, defining story parameters, and processing user input.
+   The `story_telling` package facilitates communication with the OpenAI assistant, enabling narrative management. It handles receiving responses from the assistant, defining story parameters, and processing user input.
 
 ## Dependecies
 
