@@ -44,8 +44,8 @@ Once both the server and client are running, the interface will be fully functio
 ## Acknowledgments
 
 Special thanks to:
-- **Prof. Doutor Rui P. Rocha** for his continuous guidance, support, and motivation throughout this project.
-- **Prof. Doutor Fernando Perdigão** for his for his valuable and critical insights.
+- **Prof. Doutor Rui P. Rocha** (rprocha@isr.uc.pt) for his continuous guidance, support, and motivation throughout this project.
+- **Prof. Doutor Fernando Perdigão** (fp@deec.uc.pt) for his for his valuable and critical insights.
 
 
 ## Contact
