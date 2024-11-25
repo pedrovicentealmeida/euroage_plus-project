@@ -1,8 +1,9 @@
 from tkinter import ttk
 
 class CustomTreeView:
-    def __init__(self, parent):
-        self.tree = ttk.Treeview(parent, columns=("id", "name", "age", "mmse", "mmse_text", "hobbies", "profession", "names_friends"), show="headings")
+    def __init__(self, parent, height):
+        self.height = height
+        self.tree = ttk.Treeview(parent, columns=("id", "name", "age", "mmse", "mmse_text", "hobbies", "profession", "names_friends"), show="headings", height=height)
         self.apply_styles()
         self.configure_columns()
         
@@ -30,7 +31,7 @@ class CustomTreeView:
         self.tree.heading("profession", text="Profissão Passada")
         self.tree.heading("names_friends", text="Familiares e Amigos")
 
-        self.tree.pack(fill="both", expand=True)
+        self.tree.pack(fill="both", expand=True) if self.height is None else self.tree.pack(padx=10, pady=27)
         
     def insert_data(self, data):
         for item in data:

@@ -1,37 +1,63 @@
+import tkinter as tk
+from tkinter import messagebox
+
 from gui.login_window import LoginWindow
 from gui.new_story_window import NewStoryWindow
+from gui.connectivity_window import ConnectivityWindow
 
-from network.client import SocketClient
+from network.client import SocketClientServer, SocketClientRobot
 
 from gui_components.CustomToolbar import CustomToolbar
 
 from utils.helpers import clear_root
 
-import tkinter as tk
+import config
 
 class AppController:
     def __init__(self):
         self.root = tk.Tk()
+        self.root.geometry('500x300')
         self.root.title("Story Telling - EuroAge+")
         self.root.resizable(False, False)
+        
+        self.server = SocketClientServer()
+        self.robot = None
+        self.toolbar = CustomToolbar(self.server)
+        
+    def login_window(self):
+        
+        if self.server.connect() == True:
+            login = LoginWindow(self.root, self.server)
 
-        self.client = SocketClient()
-        self.toolbar = CustomToolbar(self.client) 
+            while not login.login_check:
+                self.root.update()
+            
+            config.ROBOT_HOST =  self.server.receive_message_server()
+            self.robot = SocketClientRobot(config.ROBOT_HOST)
+            
+            if not self.robot.connect(config.ROBOT_HOST):
+                clear_root(self.root)
+                self.toolbar.display(self.root, self.robot)
+                self.root.geometry('1300x700')
+                
+                ConnectivityWindow(self.root, self.server, self.robot, self.toolbar)
+                messagebox.showwarning("Aviso!", "Robô não encontrado!")
+            
+            else:
+                clear_root(self.root)
+                self.toolbar.display(self.root, self.robot)
+                self.toolbar.update_status_icon(True)
+                self.root.geometry('1300x700')
+                NewStoryWindow(self.root, self.server, self.robot, self.toolbar)
 
-        self.show_login_window()
-        self.root.mainloop()
-
-    def show_login_window(self):
-        LoginWindow(self.root, self.client, on_login_success=self.show_new_story_window)
-
-    def show_new_story_window(self):
-        clear_root(self.root)
-        self.root.geometry('1300x700')
-        NewStoryWindow(self.root, self.client)
-        self.toolbar.display(self.root) 
+        else:
+            messagebox.showwarning("Aviso!", "Server não encontrado!")
 
 def main():    
-    AppController()
+    app = AppController()
+    
+    app.login_window()
+    app.root.mainloop()
 
 if __name__ == "__main__":
     main()

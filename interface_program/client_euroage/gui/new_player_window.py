@@ -1,9 +1,9 @@
 from tkinter import Toplevel, Frame, Label, LabelFrame, Entry, Button, NORMAL, DISABLED, N, LEFT, HORIZONTAL, Scale, PhotoImage, IntVar, Radiobutton, Text, ttk, messagebox
 from typing import Optional, List, Tuple
-from network.client import SocketClient
+from network.client import SocketClientServer
 
 class NewPlayerWindow:
-    def __init__(self, root, client: SocketClient, player_info: Optional[List] = None):
+    def __init__(self, root, client: SocketClientServer, player_info: Optional[List] = None):
         self.root = root
         self.client = client
         self.player_info = player_info

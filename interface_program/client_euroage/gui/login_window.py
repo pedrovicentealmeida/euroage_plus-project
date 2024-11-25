@@ -1,35 +1,36 @@
 from tkinter import Label, LabelFrame, Entry, Button, NORMAL, DISABLED, messagebox
-from network.client import SocketClient
+from network.client import SocketClientServer
 
 class LoginWindow:
-    def __init__(self, root, client: SocketClient, on_login_success):
-        self.root = root
-        self.client = client
-        self.on_login_success = on_login_success
-        
-        self.root.geometry('500x300')
 
-        txt_dados = Label(root, text="Credenciais de Acesso", font=("Consolas", 16), anchor="center", padx=5)
-    
-        txt_login = LabelFrame(root, text="Login: ", font=("Consolas", 14), padx=5)
+    def __init__(self, root, server: SocketClientServer):
+        self.root = root
+        self.server = server
+        self.login_check = False
+        self.create_gui_elements()
+
+    def create_gui_elements(self):
+        txt_dados = Label(self.root, text="Credenciais de Acesso", font=("Consolas", 16), anchor="center", padx=5)
+        txt_dados.pack(pady=15)
+        self.define_componnets()
+
+    def define_componnets(self):
+        txt_login = LabelFrame(self.root, text="Login: ", font=("Consolas", 14), padx=5)
         self.entry_login = Entry(txt_login, width=35, font=("Consolas", 13))
+
+        txt_login.pack(pady=5)
+        self.entry_login.pack(pady=3)
         
-        txt_pass = LabelFrame(root, text="Password: ", font=("Consolas", 14), padx=5)
+        txt_pass = LabelFrame(self.root, text="Password: ", font=("Consolas", 14), padx=5)
         self.entry_pass = Entry(txt_pass, width=35, font=("Consolas", 13), show="*")
+
+        txt_pass.pack(pady=10)
+        self.entry_pass.pack(pady=3)
 
         self.entry_login.bind("<KeyRelease>", self.enable_login_button)
         self.entry_pass.bind("<KeyRelease>", self.enable_login_button)
         
-        self.btn_login = Button(root, text="Iniciar sessão", font=("Consolas", 13), borderwidth=1, command=self.check_login, state=DISABLED)
-        
-        txt_dados.pack(pady=15)
-        
-        txt_login.pack(pady=5)
-        self.entry_login.pack(pady=3)
-        
-        txt_pass.pack(pady=10)
-        self.entry_pass.pack(pady=3)
-        
+        self.btn_login = Button(self.root, text="Iniciar sessão", font=("Consolas", 13), borderwidth=1, command=self.check_login, state=DISABLED)
         self.btn_login.pack(pady=10)
 
     def enable_login_button(self, event=None):
@@ -39,22 +40,13 @@ class LoginWindow:
             self.btn_login.config(state=DISABLED)
     
     def check_login(self):
-        self.client.send_message(self.entry_login.get())
-        self.client.send_message(self.entry_pass.get())
+        self.server.send_message_server(self.entry_login.get())
+        self.server.send_message_server(self.entry_pass.get())
 
-        data =  self.client.receive_message()
+        data =  self.server.receive_message_server()
         
         if data == "1":
-            login_successful = True
+            self.login_check = True
 
-            if login_successful:
-                self.on_login_success()
-            
-            #if robot_socket_text is None:
-            #    messagebox.showerror("Erro!", "Sem connexão com o robô!")
-            #    connectivity()
-        
         else:
             messagebox.showwarning("Aviso!", "Credenciais erradas")
-
-        

@@ -1,19 +1,13 @@
 from tkinter import LabelFrame, Label, PhotoImage, Button, messagebox, Entry, END
 from gui_components.CustomTreeView import CustomTreeView
-from network.client import SocketClient
+from network.client import SocketClientServer
 from utils.helpers import PatientDataFetcher
 
 class PlayersWindow:
-    def __init__(self, root, client: SocketClient):
+    def __init__(self, root, client: SocketClientServer):
         self.root = root
         self.client = client
-        #self.setup_window()
         self.create_gui_elements()
-
-    def setup_window(self):
-        self.root.geometry('1300x700')
-        for child in self.root.winfo_children():
-            child.destroy()
 
     def create_gui_elements(self):
         self.data = PatientDataFetcher(self.client).fetch_patient_data()
@@ -94,7 +88,7 @@ class PlayersWindow:
         self.search.insert(0, "Pesquisa pelo nome")
 
     def create_treeview(self, parent):
-        self.tree_view = CustomTreeView(parent)
+        self.tree_view = CustomTreeView(parent, height=23)
         self.tree_view.insert_data(self.data)
         self.tree_view.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
 

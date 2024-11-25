@@ -2,21 +2,24 @@ from utils.helpers import clear_root
 from tkinter import Menu, PhotoImage
 
 class CustomToolbar:
-    def __init__(self, client, robot_socket_text=None, robot_socket_commands=None):
+    def __init__(self, client):
         self.client = client
-        self.robot_socket_text = robot_socket_text
-        self.robot_socket_commands = robot_socket_commands
         self.menu_principal = None
+        self.item_state = "normal"
+        self.status_icon_item = None
 
-    def display(self, root, state="normal"):
+    def change_ip(self, robot):
+        self.robot = robot
+
+    def display(self, root, robot_socket):
         self.root = root
-        self.state = state
+        self.robot = robot_socket
         
         if self.menu_principal is None:
             self.menu_principal = Menu(self.root)
             self.root.config(menu=self.menu_principal)
 
-        self.item_state = "disabled" if state == "disabled" else "normal"
+        self.item_state = "normal"
         self.add_menu_items()
         self.load_status_icon()
 
@@ -33,16 +36,23 @@ class CustomToolbar:
         except Exception as e:
             print(f"Error loading images: {e}")
             return
-
-        if self.robot_socket_text is None or self.robot_socket_commands is None:
-            self.menu_principal.add_command(image=self.root.imagem_red, state="disabled")
+        
+        if self.robot is None or self.robot is None:
+            self.update_status_icon(True)
         else:
-            self.menu_principal.add_command(image=self.root.imagem_green, state="disabled")
-    
+            self.update_status_icon(False)
+
+    def update_status_icon(self, connected):
+        self.menu_principal.delete(0, "end")
+        self.add_menu_items()
+
+        icon = self.root.imagem_green if connected else self.root.imagem_red
+        self.status_icon_item = self.menu_principal.add_command(image=icon, state="disabled")
+
     def new_story(self):
         from gui.new_story_window import NewStoryWindow
         clear_root(self.root)
-        NewStoryWindow(self.root, self.client)
+        NewStoryWindow(self.root, self.client, self.robot, self)
 
     def players(self):
         from gui.players_window import PlayersWindow
@@ -50,4 +60,13 @@ class CustomToolbar:
         PlayersWindow(self.root, self.client)
 
     def connectivity(self):
-        print("Connectivity selected")
+        from gui.connectivity_window import ConnectivityWindow
+        clear_root(self.root)
+        ConnectivityWindow(self.root, self.client, self.robot, self)
+
+    def toggle_state(self, state):
+        self.item_state = "disabled" if state == "disabled" else "normal"
+        
+        self.menu_principal.delete(0, "end")
+        self.add_menu_items()
+        self.load_status_icon()

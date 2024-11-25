@@ -59,6 +59,16 @@ class Database:
             cur = con.cursor()
             cur.execute("SELECT * FROM Patients WHERE institution_id = ?", (institution_id,))
             return cur.fetchall()
+    
+    def edit_ip(self, new_ip_address, institution_id):
+        with self.get_connection() as con:
+            cur = con.cursor()
+            cur.execute("""
+                UPDATE Institutions
+                SET robot_ip = ?
+                WHERE id = ?
+            """, (new_ip_address, institution_id))
+            con.commit()
 
 class Server:
     def __init__(self, host, port):
@@ -97,15 +107,16 @@ class Server:
 
     def check_login(self, client_socket):
         login = self.receive_message(client_socket)
-        print(login)
         password = self.receive_message(client_socket)
-        print(password)
 
         if login and password:
             institution = self.database.validate_login(login, password)
             if institution:
                 self.send_message(client_socket, "1")  # Login success
-                #self.send_message(client_socket, institution[3])  # Send robot IP
+                if institution[3] == "":
+                    self.send_message(client_socket, "127.0.0.1")
+                else:
+                    self.send_message(client_socket, institution[3])
                 return institution[0]  # Return institution ID
             else:
                 self.send_message(client_socket, "0" if institution else "-1")
@@ -140,6 +151,13 @@ class Server:
                 print("Executing get_players for institution:", institution_id)
                 patients = self.database.get_patients(institution_id)
                 self.send_patients(patients, client_socket)
+            
+            elif command == "600":
+                print("Executing edit_ip for institution: ", institution_id)
+                new_ip = self.receive_message(client_socket)
+                print("Request to change IP for: ", new_ip)
+                self.database.edit_ip(new_ip, institution_id)
+                
             elif command is None:
                 print("Client disconnected.")
                 break

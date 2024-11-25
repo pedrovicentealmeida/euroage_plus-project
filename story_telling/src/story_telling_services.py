@@ -36,7 +36,7 @@ class StoryTelling:
     def __init__(self, node):
         """Initialize the StoryTelling class."""
         self.node = node  # Save the node reference
-        self.client = openai.OpenAI(api_key="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")
+        self.client = openai.OpenAI(api_key="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")
         self.thread = self.client.beta.threads.create()
 
     def new_message(self, text: str) -> None:
@@ -54,7 +54,7 @@ class StoryTelling:
         """Define story parameters based on user input."""
         info = (f"Jogador:\n {name} de {age} anos\n Gosta de {hobbies}\n Nível de défice cognitivo {brain}\n Profissão passada: {profession}\n Família/Amigos: {family}"
                 f"História:\n Tema da história: {theme}\n Não fales em {forbidden_topics}")
-
+        
         self.new_message(info)
 
     def obtain_response(self) -> str:
@@ -69,8 +69,6 @@ class StoryTelling:
 
         event_handler.all_text += event_handler.text_final
         return event_handler.all_text
-
-
 
 class StoryTellingNode(Node):
     """ROS2 Node to handle storytelling services."""

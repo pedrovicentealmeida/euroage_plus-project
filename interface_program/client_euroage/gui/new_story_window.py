@@ -5,25 +5,18 @@ from gui_components.CustomTreeView import CustomTreeView
 from gui.new_player_window import NewPlayerWindow
 from gui.telling_story_window import TellingStoryWindow
 
-from network.client import SocketClient
-
 from utils.helpers import PatientDataFetcher
 
 class NewStoryWindow:
-    def __init__(self, root, client: SocketClient):
+    def __init__(self, root, server, robot, toolbar):
         self.root = root
-        self.client = client
-        #self.setup_window()
+        self.toolbar = toolbar
+        self.server = server
+        self.robot = robot
         self.create_gui_elements()
 
-    def setup_window(self):
-        self.root.geometry('1300x700')
-        for child in self.root.winfo_children():
-            child.destroy()
-
     def create_gui_elements(self):
-        self.data = PatientDataFetcher(self.client).fetch_patient_data()
-        #CustomToolbar(self.root, self.client, "normal")
+        self.data = PatientDataFetcher(self.server).fetch_patient_data()
         self.create_story_frame()
         self.create_players_frame()
         self.create_submit_button()
@@ -69,7 +62,7 @@ class NewStoryWindow:
         self.root.adicionar_img = PhotoImage(file="icons/plus_1.png")
         adicionar = Button(parent, image=self.root.adicionar_img, borderwidth=0, 
                            activebackground=self.root['bg'], activeforeground=self.root['bg'], 
-                           command=lambda: NewPlayerWindow(self.root, self.client, None))
+                           command=lambda: NewPlayerWindow(self.root, self.server, None))
         adicionar.grid(row=0, column=2, padx=15)
 
     def create_search_entry(self, parent):
@@ -87,7 +80,7 @@ class NewStoryWindow:
         self.search.bind("<KeyRelease>", self.filter_treeview)
 
     def create_treeview(self, parent):
-        self.tree_view = CustomTreeView(parent)
+        self.tree_view = CustomTreeView(parent, height=None)
         self.tree_view.insert_data(self.data)
         self.tree_view.tree.bind("<<TreeviewSelect>>", self.on_tree_select)
 
@@ -103,22 +96,22 @@ class NewStoryWindow:
             self.submit_button.config(state="disabled")
 
     def send_infos_to_story(self):
-        #send_robot("500")
+        self.robot.send_commands_robot("500")
         
-        #send_robot(tema_entry.get())
-        #send_robot(topics_entry.get())
+        self.robot.send_commands_robot(self.theme_entry.get())
+        self.robot.send_commands_robot(self.topics_entry.get())
         
         selected_item = self.tree_view.tree.selection()
         
         player_info = self.tree_view.tree.item(selected_item[0], 'values')
-        print(player_info[1])
-        print(player_info[2])
-        print(player_info[4])
-        print(player_info[5])
-        print(player_info[6])
-        print(player_info[7])
+        self.robot.send_commands_robot(player_info[1])
+        self.robot.send_commands_robot(player_info[2])
+        self.robot.send_commands_robot(player_info[4])
+        self.robot.send_commands_robot(player_info[5])
+        self.robot.send_commands_robot(player_info[6])
+        self.robot.send_commands_robot(player_info[7])
 
-        TellingStoryWindow(self.root, self.client)
+        TellingStoryWindow(self.root, self.server, self.robot, self.toolbar)
 
     def on_tree_select(self, event=None):
         self.validate_entries()

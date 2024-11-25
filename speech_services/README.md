@@ -48,9 +48,6 @@ Additionally, this package relies on the following non-standard Python libraries
 - **`pyaudio`**: Supports audio output, enabling real-time audio processing.
 - **`pydub`**: Facilitates audio manipulation and processing, including conversion and editing.
 
-## Installation Instructions
-To install the `speech_services` package, follow these steps...
-
 ## Service Parameters
 ### TtsMicrosoft 
 The `TtsMicrosoft` service accepts the following parameters:
