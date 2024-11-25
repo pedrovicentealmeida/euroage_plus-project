@@ -139,8 +139,8 @@ You can adjust the language parameter to match the language of the speech you wa
 ## Acknowledgments
 
 Special thanks to:
-- **Prof. Doutor Rui P. Rocha** for his continuous guidance, support, and motivation throughout this project.
-- **Prof. Doutor Fernando Perdigão** for his valuable insights into audio processing and signal analysis, which made the lip synchronization features of this package possible.
+- **Prof. Doutor Rui P. Rocha** (rprocha@isr.uc.pt) for his continuous guidance, support, and motivation throughout this project.
+- **Prof. Doutor Fernando Perdigão** (fp@deec.uc.pt) for his valuable insights into audio processing and signal analysis, which made the lip synchronization features of this package possible.
 
 
 ## Contact
