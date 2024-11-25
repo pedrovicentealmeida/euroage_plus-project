@@ -1,4 +1,4 @@
-# Euroage+ Project - ROS Jazzy Version
+# Euroage+ Project - ROS Jazzy Distribution
 
 <div align="center">
   <img src="https://euroageplus.unex.es/wp-content/uploads/2023/11/logo-euroageplus-uai-516x140.png" alt="Logo Euroage Plus">
