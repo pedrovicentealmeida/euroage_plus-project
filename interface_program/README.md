@@ -7,7 +7,7 @@ The `interface_program` provides a graphical user interface (GUI) for the storyt
 ## Citation
 You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
 
-Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.
+*Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.*
 
 ### Key Features
 
