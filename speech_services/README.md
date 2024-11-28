@@ -3,6 +3,11 @@
 ## Package Description
 The `speech_services` package provides a versatile and efficient solution for speech synthesis (TTS) and speech recognition (STT) within ROS 2 systems. By integrating advanced third-party services such as Microsoft Azure, Google Cloud, and Eleven Labs, this package enables robots to perform dynamic speech interactions, enhancing communication and user experience. Additionally, the package supports lip-sync capabilities, aligning synthesized speech with realistic visual feedback for more engaging and human-like interactions.
 
+## Citation
+You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
+
+*Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.*
+
 ## Key Features
 
 ### Lip-Sync Capabilities
