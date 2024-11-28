@@ -4,6 +4,11 @@
 
 The `story_telling` package integrates OpenAI's assistant API into ROS 2, enabling an interactive storytelling experience. Designed as part of a larger system for a storytelling robot, this package provides services to set up story parameters, send messages to the assistant, and receive responses. It allows the development of interactive and adaptive narratives in robotics.
 
+## Citation
+You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
+
+*Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.*
+
 ### Key Features
 
 - **Interactive Storytelling**: Users can interact with a narrative using ROS 2 services, where OpenAI's assistant generates contextual responses based on user inputs and predefined story settings.
