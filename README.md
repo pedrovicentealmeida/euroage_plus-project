@@ -7,7 +7,13 @@
 </div>
 
 ## Description
-This repository contains all the resources related to the serious game developed for the [EuroAGE+ project](https://euroageplus.unex.es/pt-pt/), which was a key component of my MSc thesis dissertation [1]. It also includes a stable and user-friendly version of the game, implemented with the Jazzy distribution of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this distribution of ROS.
+This repository contains all the resources related to the serious game developed for the [EuroAGE+ project](https://euroageplus.unex.es/pt-pt/), which was a key component of my MSc thesis dissertation [1] and was presented in the ICARA 2025 conference [2]. It also includes a stable and user-friendly version of the game, implemented with the Jazzy distribution of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this distribution of ROS.
+
+## Citation
+You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
+
+Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.
+
 
 ## Table of Contents
 - [Organization](#organization)
@@ -67,4 +73,5 @@ The interface is intuitive, allowing you to generate stories based on your reque
 
 ## References
 
-[1] Almeida, Pedro V. (2024). Social Robot Interaction with Human Users through Natural Language (in Portuguese) [Master's Thesis, University of Coimbra]. [https://hdl.handle.net/10316/116624](https://hdl.handle.net/10316/116624)
+[1] Almeida, Pedro V. (2024). Social robot interaction with human users through natural language (in Portuguese) [Master's Thesis, University of Coimbra]. [https://hdl.handle.net/10316/116624](https://hdl.handle.net/10316/116624)
+[2] Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.
