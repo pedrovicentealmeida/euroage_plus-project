@@ -74,4 +74,5 @@ The interface is intuitive, allowing you to generate stories based on your reque
 ## References
 
 [1] Almeida, Pedro V. (2024). Social robot interaction with human users through natural language (in Portuguese) [Master's Thesis, University of Coimbra]. [https://hdl.handle.net/10316/116624](https://hdl.handle.net/10316/116624)
+
 [2] Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.
