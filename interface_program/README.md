@@ -4,6 +4,11 @@
 
 The `interface_program` provides a graphical user interface (GUI) for the storytelling robot system. It allows users to define story parameters, control the flow of the narrative (e.g., pausing or stopping), and save different player profiles, making it easy to use with various participants while keeping their details saved for future use.
 
+## Citation
+You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
+
+Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.
+
 ### Key Features
 
 - **Define Story Parameters**: Easily set up parameters for the story, such as player details and story preferences.
