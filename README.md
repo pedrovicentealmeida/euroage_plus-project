@@ -67,4 +67,4 @@ The interface is intuitive, allowing you to generate stories based on your reque
 
 ## References
 
-[1] Almeida, Pedro V. (2024). Interaction through Natural Language of a Social Robot with Elderly End Users (in Portuguese) [Master's Thesis, University of Coimbra]. [https://hdl.handle.net/10316/116624](https://hdl.handle.net/10316/116624)
+[1] Almeida, Pedro V. (2024). Social Robot Interaction with Human Users through Natural Language (in Portuguese) [Master's Thesis, University of Coimbra]. [https://hdl.handle.net/10316/116624](https://hdl.handle.net/10316/116624)
