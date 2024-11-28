@@ -7,7 +7,7 @@
 </div>
 
 ## Description
-This repository contains all the resources related to the serious game developed for the [EuroAGE+ project](https://euroageplus.unex.es/pt-pt/), which was a key component of my MSc thesis dissertation [1] and was presented in the ICARA 2025 conference [2]. It also includes a stable and user-friendly version of the game, implemented with the Jazzy distribution of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this distribution of ROS.
+This repository contains the source code of the serious game developed for the [EuroAGE+ project](https://euroageplus.unex.es/pt-pt/), which was a key contribution of my MSc thesis dissertation developed at the Institute of Systems and Robotics - University of Coimbra (Portugal) [1] and was presented in the ICARA 2025 conference [2]. It includes a stable and user-friendly version of the game, implemented with the Jazzy distribution of the Robot Operating System (ROS) 2. The project natively developed in ROS 1 was migrated from the ROS Noetic branch to ensure compatibility with ROS 2.
 
 ## Citation
 You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
