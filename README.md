@@ -7,7 +7,7 @@
 </div>
 
 ## Description
-This repository contains all the resources related to the serious game developed for the EuroAGE+ project, which was a key component of my MSc thesis dissertation. It also includes a stable and user-friendly version of the game, utilizing the Jazzy distribution of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this distribution of ROS.
+This repository contains all the resources related to the serious game developed for the [EuroAGE+ project](https://euroageplus.unex.es/pt-pt/), which was a key component of my MSc thesis dissertation [1]. It also includes a stable and user-friendly version of the game, implemented with the Jazzy distribution of the Robot Operating System (ROS) 2. The project was migrated from the ROS Noetic branch to ensure compatibility with this distribution of ROS.
 
 ## Table of Contents
 - [Organization](#organization)
@@ -16,7 +16,7 @@ This repository contains all the resources related to the serious game developed
 
 ## Organization
 
-This repository is organized into four main folders, each playing an essential role in the development and execution of the serious game. Below is a brief description of each folder:
+This repository is organized into four main folders, each playing an essential role in the design and implementation of the serious game. Below is a brief description of each folder:
 
 1. **`interface_program`**:
    This folder contains two subfolders related to the therapist's interface: one for the server and another for the client. Together, they allow the therapist's interface to run, retrieving patient data stored in a pre-populated database.
@@ -64,3 +64,7 @@ Now that you have everything started, you'll need the credentials for the therap
 * **Password**: qwerty
 
 The interface is intuitive, allowing you to generate stories based on your requests.
+
+## References
+
+[1] Almeida, Pedro V. (2024). Interaction through Natural Language of a Social Robot with Elderly End Users (in Portuguese) [Master's Thesis, University of Coimbra]. [https://hdl.handle.net/10316/116624](https://hdl.handle.net/10316/116624)
