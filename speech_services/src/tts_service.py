@@ -18,7 +18,7 @@ from speech_services.srv import tts_microsoft, tts_microsoftResponse
 mouth_pub = None
 
 # Azure Speech Configuration
-speech_config = speechsdk.SpeechConfig(subscription="43afa09c9aff4cc183a2c64622600983", region="westeurope")
+speech_config = speechsdk.SpeechConfig(subscription="YOUR-API-KEY", region="YOUR-API-REGION")
 
 # Google Speech Configuration
 try:
@@ -34,7 +34,7 @@ def eleven_tts(text: str) -> None:
     headers = {
         "Accept": "audio/mpeg",
         "Content-Type": "application/json",
-        "xi-api-key": "7e45c9f57e14bbd6d815cbdd4b516ae8"
+        "xi-api-key": "YOUR-API-KEY"
     }
     data = {
         "text": text,
