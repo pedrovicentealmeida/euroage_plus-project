@@ -7,7 +7,7 @@ from speech_services.srv import stt, sttResponse
 mouth_pub = None
 
 # Initialize the Microsoft (Azure) speech recognition configuration once
-speech_config = speechsdk.SpeechConfig("43afa09c9aff4cc183a2c64622600983", "westeurope")
+speech_config = speechsdk.SpeechConfig("YOUR-API-KEY", "YOUR-API-REGION")
 audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
 
 def microsoft_stt(language: str):
