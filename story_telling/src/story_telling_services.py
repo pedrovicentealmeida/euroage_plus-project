@@ -36,7 +36,7 @@ class StoryTelling:
     def __init__(self, node):
         """Initialize the StoryTelling class."""
         self.node = node  # Save the node reference
-        self.client = openai.OpenAI(api_key="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")
+        self.client = openai.OpenAI(api_key="YOUR-API-KEY")
         self.thread = self.client.beta.threads.create()
 
     def new_message(self, text: str) -> None:
@@ -62,7 +62,7 @@ class StoryTelling:
         event_handler = EventHandler(self.node)  # Pass the node here
         with self.client.beta.threads.runs.stream(
             thread_id=self.thread.id,
-            assistant_id="asst_SnlrOiiPlAvoLztLBsMGRNiO",
+            assistant_id="YOUR-ASSISTANT-ID",
             event_handler=event_handler,
         ) as stream:
             stream.until_done()
