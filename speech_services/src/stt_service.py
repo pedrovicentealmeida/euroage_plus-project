@@ -14,7 +14,7 @@ class STTServiceNode(Node):
         self.mouth_pub = self.create_publisher(UInt8, 'mouth_shape', 10)
 
         # Initialize the Microsoft (Azure) speech recognition configuration
-        self.speech_config = speechsdk.SpeechConfig("43afa09c9aff4cc183a2c64622600983", "westeurope")
+        self.speech_config = speechsdk.SpeechConfig("YOUR-API-KEY", "YOUR-API-REGION")
         self.audio_config = speechsdk.audio.AudioConfig(use_default_microphone=True)
 
         # Create the service for STT
