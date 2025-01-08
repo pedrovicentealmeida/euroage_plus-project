@@ -1,7 +1,7 @@
 # Euroage+ Project - ROS Noetic Version
 
 <div align="center">
-  <img src="![image](https://github.com/user-attachments/assets/36b8da21-82b6-4910-b069-059883af3a90)" alt="Logo Euroage Plus">
+  <img src="https://github.com/user-attachments/assets/fa7c0cd5-5df7-476b-8d35-5194915540ff" alt="logo-euroageplus-uai"">
   &nbsp;&nbsp;&nbsp;&nbsp;
   <img src="https://robocademy.com/wp-content/uploads/2020/05/ros_noetic_logo1-1024x601-1.png" alt="Noetic Version" style="width: 240px;">
 </div>
