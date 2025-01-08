@@ -1,7 +1,7 @@
 # EuroAGE+ Project - ROS Jazzy Distribution
 
 <div align="center">
-  <img src="https://euroageplus.unex.es/wp-content/uploads/2023/11/logo-euroageplus-uai-516x140.png" alt="Logo Euroage Plus">
+  <img src="https://github.com/user-attachments/assets/fa7c0cd5-5df7-476b-8d35-5194915540ff" alt="logo-euroageplus-uai"">
   &nbsp;&nbsp;
   <img src="https://github.com/user-attachments/assets/79b1cfa2-7d07-4cf5-a753-731de974b14e" alt="ROS Jazzy" style="width: 289px;">
 </div>
