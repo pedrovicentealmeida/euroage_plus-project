@@ -12,7 +12,7 @@ This repository contains the source code of the serious game developed for the [
 ## Citation
 You're free to reuse the source code in this repository provided that its authors' copyright is retained and you cite in your work the following publication:
 
-*Almeida, Pedro V., & Rocha, Rui P. (2025). AI-powered storytelling with a social assistive robot to foster cognitive health in seniors. 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia.*
+*Almeida, P.V. & Rocha, R.P. (2025). AI-powered social robot for cognitive stimulation in the elderly through personalized storytelling. In Proc. of 2025 11th International Conference on Automation, Robotics, and Applications (ICARA 2025), Zagreb, Croatia*
 
 
 ## Table of Contents
@@ -36,7 +36,7 @@ This repository is organized into four main folders, each playing an essential r
 4. **`story_telling`**:
    The `story_telling` package facilitates communication with the OpenAI assistant, enabling narrative management. It handles receiving responses from the assistant, defining story parameters, and processing user input.
 
-## Dependecies
+## Dependencies
 
 For detailed information about the dependencies of the overall project, please refer to the specific folders mentioned. Each folder contains a README file with instructions to help you install all the necessary components correctly and perform tests to ensure everything is functioning properly.
 
