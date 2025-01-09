@@ -30,7 +30,7 @@ This repository is organized into four main folders, each playing an essential r
 4. **`story_telling`**:
    The story_telling package facilitates communication with the OpenAI assistant, enabling narrative management. It handles receiving responses from the assistant, defining story parameters, and processing user input.
 
-## Dependecies
+## Dependencies
 
 For detailed information about the dependencies of the overall project, please refer to the specific folders mentioned. Each folder contains a README file with instructions to help you install all the necessary components correctly and perform tests to ensure everything is functioning properly.
 
