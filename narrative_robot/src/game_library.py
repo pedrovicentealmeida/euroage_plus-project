@@ -55,6 +55,7 @@ class StoryTelling(Node):
         self.subscription = self.create_subscription(String, 'story_telling_text', self.story_callback, 10)
 
         self.get_logger().info("Subscribed to 'story_telling_text' topic.")
+        self.rate = "0" # Default value
 
     def synthesize_text(self):
         """Thread method to process text-to-speech requests."""
@@ -70,7 +71,7 @@ class StoryTelling(Node):
                     if text is None:
                         break
 
-                    tts_req = TtsMicrosoft.Request(text=text, language="pt-PT", rate="0")
+                    tts_req = TtsMicrosoft.Request(text=text, language="pt-PT", rate=self.rate)
                     self.get_logger().info(f"Synthesizing speech: {text}")
                     self.client_tts.call(tts_req)
                     self.synthesize_queue.task_done()
@@ -140,6 +141,14 @@ class StoryTelling(Node):
                 forbidden_topics=forbidden_topics
             )
             response = self.client_setup_story.call(req)
+            
+            if(brain == "Nulo"):
+                self.rate = "-10"
+            elif(brain == "Leve"):
+                self.rate = "-25"
+            else:
+                self.rate = "-30"
+            
             self.get_logger().info(f"Parameters defined successfully: {response}")
         except Exception as e:
             self.get_logger().error(f"Setup story service call failed: {e}")

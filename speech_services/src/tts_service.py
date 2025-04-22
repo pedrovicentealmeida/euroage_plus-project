@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 ##################################################################################
 # BSD 3-Clause License
 # 
@@ -29,8 +31,6 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ##################################################################################
 
-#!/usr/bin/env python3
-
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import UInt8
@@ -57,7 +57,7 @@ class TTSServiceNode(Node):
 
         # Azure Speech Configuration
         self.speech_config = speechsdk.SpeechConfig(subscription="YOUR-API-KEY", region="YOUR-API-REGION")
-
+        
         # Google Speech Configuration
         try:
             self.google_client = texttospeech.TextToSpeechClient()
