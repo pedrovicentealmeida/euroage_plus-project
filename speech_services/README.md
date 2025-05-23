@@ -46,7 +46,7 @@ This package requires the following ROS 2 packages:
 
 ### Python Dependencies
 Additionally, this package relies on the following non-standard Python libraries:
-- **`portaudio19`:
+- **`portaudio19`**:
 ```bash
 sudo apt install portaudio19-dev python3-dev
 ```
