@@ -146,7 +146,8 @@ class Robot:
                             if text == "-1":
                                 self.stop = True
                                 self.pause = False
-                                return
+                                # return
+                                break
                             elif text == "0":
                                 self.pause = True
                             elif text == "1":
@@ -156,6 +157,7 @@ class Robot:
                     break
                 else:
                     print("Unknown root received:", number_root, flush=True)
+                    self.stop = False #23/05
         except (ConnectionResetError, BrokenPipeError):
             print("Commands client disconnected.")
         finally:

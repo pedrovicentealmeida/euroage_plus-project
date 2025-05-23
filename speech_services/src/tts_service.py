@@ -56,7 +56,7 @@ class TTSServiceNode(Node):
         self.mouth_pub = self.create_publisher(UInt8, 'mouth_shape', 10)
 
         # Azure Speech Configuration
-        self.speech_config = speechsdk.SpeechConfig(subscription="YOUR-API-KEY", region="YOUR-API-REGION")
+        self.speech_config = speechsdk.SpeechConfig("YOUR-API-KEY", "YOUR-API-REGION")
         
         # Google Speech Configuration
         try:
