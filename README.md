@@ -64,7 +64,7 @@ Assuming you have installed all the dependencies and tested everything correctly
    python3 client.py
    ```
 
-Now that you have everything started, you'll need the credentials for the therapist:
+Now that you have everything started, you'll need to type the credentials for the therapist. The dummy credentials (just for testing) are:
 
 * **Username**: caritas@gmail.com
 * **Password**: qwerty

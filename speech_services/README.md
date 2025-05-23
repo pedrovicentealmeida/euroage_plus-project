@@ -46,12 +46,18 @@ This package requires the following ROS 2 packages:
 
 ### Python Dependencies
 Additionally, this package relies on the following non-standard Python libraries:
+- **`portaudio19`:
+```bash
+sudo apt install portaudio19-dev python3-dev
+```
 - **`azure.cognitiveservices.speech`**: For Microsoft Azure's cognitive services, facilitating speech synthesis and recognition.
 - **`google.cloud`**: Provides access to Google Cloud services for text-to-speech functionalities.
 - **`requests`**: For making HTTP requests to external APIs (case of Eleven Labs).
 - **`numpy`**: For performing numerical operations and managing array data.
 - **`pyaudio`**: Supports audio output, enabling real-time audio processing.
 - **`pydub`**: Facilitates audio manipulation and processing, including conversion and editing.
+- **`setuptools`**
+- **`pyyaml`**: Allows parsing yaml files.
 
 ## Service Parameters
 ### TtsMicrosoft 

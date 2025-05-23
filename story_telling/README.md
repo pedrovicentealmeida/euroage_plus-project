@@ -61,6 +61,7 @@ The package includes a launch file for easy deployment:
 ### Python Dependencies
 This package also requires the following Python libraries:
 - **`openai`**: Official library to interact with OpenAI’s API.
+- **`google`**: API of Google cloud services.
 
 ## Example Usage
 
