@@ -121,6 +121,7 @@ class Robot:
         try:
             while True:
                 if self.start == True:
+                    self.stop = False # 06/06/2025 Alteração
                     self.tell_story(client_socket)
                 else:
                     time.sleep(1)
@@ -146,7 +147,6 @@ class Robot:
                             if text == "-1":
                                 self.stop = True
                                 self.pause = False
-                                # return
                                 break
                             elif text == "0":
                                 self.pause = True
