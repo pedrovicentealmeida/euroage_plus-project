@@ -54,9 +54,9 @@ class TTSServiceNode(Node):
 
         # Global publisher for mouth shape visemes
         self.mouth_pub = self.create_publisher(UInt8, 'mouth_shape', 10)
-
+        self.local_mouth_pub = self.create_publisher(UInt8,'local_mouth_shape',10)
         # Azure Speech Configuration
-        self.speech_config = speechsdk.SpeechConfig(subscription="YOUR-API-KEY", region="YOUR-API-REGION")
+        self.speech_config = speechsdk.SpeechConfig(subscription="YOUR-API-KEY", region="YOU-API-REGION")
         
         # Google Speech Configuration
         try:
@@ -146,6 +146,7 @@ class TTSServiceNode(Node):
 
         # Callback function for visemes
         def viseme_cb(evt) -> None:
+            self.local_mouth_pub.publish(UInt8(data=evt.viseme_id))
             viseme_id = viseme_map.get(evt.viseme_id)
             if viseme_id is not None:
                 self.mouth_pub.publish(UInt8(data=viseme_id))

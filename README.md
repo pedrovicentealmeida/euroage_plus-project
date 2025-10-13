@@ -36,6 +36,9 @@ This repository is organized into four main folders, each playing an essential r
 4. **`story_telling`**:
    The `story_telling` package facilitates communication with the OpenAI assistant, enabling narrative management. It handles receiving responses from the assistant, defining story parameters, and processing user input.
 
+5. **`viseme_renderer`**:
+   The `viseme_renderer` package synchronizes the visemes received from the speech services into visible mouth expressions in a graphical window. It is an optional package, useful for situations where the robot is not present.
+
 ## Dependencies
 
 For detailed information about the dependencies of the overall project, please refer to the specific folders mentioned. Each folder contains a README file with instructions to help you install all the necessary components correctly and perform tests to ensure everything is functioning properly.
@@ -61,7 +64,13 @@ Assuming you have installed all the dependencies and tested everything correctly
    * Open another terminal and run the client by executing:
    ```bash
    cd interface_program/client/
-   python3 client.py
+   python3 main.py
+   ```
+
+3. **Run the Viseme Renderer App (Optional)**:
+   * In a new terminal run the VisemeRenderer.py node:
+   ```bash
+   ros2 run viseme_renderer VisemeRenderer.py
    ```
 
 Now that you have everything started, you'll need to type the credentials for the therapist. The dummy credentials (just for testing) are:
