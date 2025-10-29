@@ -121,7 +121,6 @@ class Robot:
         try:
             while True:
                 if self.start == True:
-                    self.stop = False # 06/06/2025 Alteração
                     self.tell_story(client_socket)
                 else:
                     time.sleep(1)
@@ -147,6 +146,7 @@ class Robot:
                             if text == "-1":
                                 self.stop = True
                                 self.pause = False
+                                # return
                                 break
                             elif text == "0":
                                 self.pause = True
@@ -157,7 +157,7 @@ class Robot:
                     break
                 else:
                     print("Unknown root received:", number_root, flush=True)
-                    self.stop = False #23/05
+                    self.stop = False # 23/05/2025
         except (ConnectionResetError, BrokenPipeError):
             print("Commands client disconnected.")
         finally:
@@ -225,6 +225,7 @@ class Robot:
         self.recive_parameters(client_socket)
         self.receive_commands_client(client_socket) # button start
         self.start = True
+        self.stop = False # 29/10/2025, Rui P. Rocha
 
     def run(self):
         """Inicializa as threads de texto e comandos."""

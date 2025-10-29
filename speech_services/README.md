@@ -64,7 +64,7 @@ sudo apt install portaudio19-dev python3-dev
 The `TtsMicrosoft` service accepts the following parameters:
 - `text` (string): Text to convert to speech.
 - `language` (string): Language of the speech (e.g., 'en-US').
-- `rate` (string): Speed of the speech (e.g., '0', '10').
+- `rate` (string): Speed of the speech (e.g., '0', '-10', '-25', '-30').
 
 ### TtsGoogle
 The `TtsGoogle` service accepts the following parameters:
