@@ -37,69 +37,95 @@ import openai
 from std_msgs.msg import String
 from story_telling.srv import SetupStory, NewMessage, ObtainResponse
 
-class EventHandler(openai.AssistantEventHandler):
-    """Custom event handler for OpenAI assistant events."""
-
-    def __init__(self, node):
-        """Initialize the event handler with a ROS2 node."""
-        super().__init__()
-        self.text_final = ""
-        self.all_text = ""
-        self.control = False
-        self.publisher = node.create_publisher(String, 'story_telling_text', 10)
-
-    def on_text_delta(self, delta, snapshot):
-        """Callback function triggered on receiving text delta."""
-        self.text_final += delta.value
-
-        # Publish sentence by sentence
-        if delta.value in (".", "?", "!"):
-            msg = String()
-            msg.data = self.text_final
-            self.publisher.publish(msg)
-            self.all_text += self.text_final
-            self.text_final = ""
-
 
 class StoryTelling:
-    """Class to handle storytelling with OpenAI assistant."""
+    """Class to handle storytelling with OpenAI Chat Completions API."""
 
-    def __init__(self, node):
+    def __init__(self, node, model):
         """Initialize the StoryTelling class."""
-        self.node = node  # Save the node reference
-        self.client = openai.OpenAI(api_key="YOUR-API-KEY")
-        self.thread = self.client.beta.threads.create()
+        self.node = node
+        self.model = model
+        self.client = openai.OpenAI(api_key="API_KEY_AQUI")
+        self.publisher = node.create_publisher(String, 'story_telling_text', 10)
+
+        # Conversation history (replaces Assistants API thread)
+        self.messages = [
+            {
+                "role": "system",
+                "content": (
+                    "You are a storytelling assistant for elderly people with cognitive impairments. "
+                    "Tell engaging, personalized stories based on the user's background and interests. "
+                    "Keep sentences short and clear. Pause naturally at punctuation marks."
+                )
+            }
+        ]
 
     def new_message(self, text: str) -> None:
-        """Send a new message to the OpenAI assistant."""
-        try:
-            self.client.beta.threads.messages.create(
-                thread_id=self.thread.id,
-                role="user",
-                content=text
-            )
-        except openai.error.OpenAIError as e:
-            raise e
+        """Add a new user message to the conversation history."""
+        self.messages.append({"role": "user", "content": text})
 
     def define_parameters(self, name, age, brain, hobbies, profession, family, theme, forbidden_topics) -> None:
         """Define story parameters based on user input."""
-        info = (f"Jogador:\n {name} de {age} anos\n Gosta de {hobbies}\n Nível de défice cognitivo {brain}\n Profissão passada: {profession}\n Família/Amigos: {family}"
-                f"História:\n Tema da história: {theme}\n Não fales em {forbidden_topics}")
-        
+        info = (
+            f"Jogador:\n {name} de {age} anos\n Gosta de {hobbies}\n"
+            f" Nível de défice cognitivo {brain}\n Profissão passada: {profession}\n"
+            f" Família/Amigos: {family}"
+            f"História:\n Tema da história: {theme}\n Não fales em {forbidden_topics}"
+        )
         self.new_message(info)
 
     def obtain_response(self) -> str:
-        """Obtain response from the OpenAI assistant."""
-        event_handler = EventHandler(self.node)  # Pass the node here
-        with self.client.beta.threads.runs.stream(
-            thread_id=self.thread.id,
-            assistant_id="YOUR-ASSISTANT-ID",
-            event_handler=event_handler,
-        ) as stream:
-            stream.until_done()
+        """Obtain streaming response from Chat Completions API, publishing sentence by sentence."""
+        all_text = ""
+        buffer = ""
 
-        event_handler.all_text += event_handler.text_final
-        return event_handler.all_text
+        try:
+            stream = self.client.chat.completions.create(
+                model=self.model,
+                messages=self.messages,
+                stream=True,
+            )
+
+            for chunk in stream:
+                delta = chunk.choices[0].delta
+                if delta.content:
+                    buffer += delta.content
+                    all_text += delta.content
+
+                    # Publish sentence by sentence
+                    while True:
+                        end_idx = -1
+                        for punct in (".", "?", "!"):
+                            idx = buffer.find(punct)
+                            if idx != -1 and (end_idx == -1 or idx < end_idx):
+                                end_idx = idx
+
+                        if end_idx == -1:
+                            break
+
+                        sentence = buffer[:end_idx + 1]
+                        buffer = buffer[end_idx + 1:]
+
+                        msg = String()
+                        msg.data = sentence.strip()
+                        if msg.data:
+                            self.publisher.publish(msg)
+
+        except openai.OpenAIError as e:
+            self.node.get_logger().error(f"OpenAI API error: {e}")
+            return ""
+
+        # Publish any remaining text that didn't end with punctuation
+        if buffer.strip():
+            msg = String()
+            msg.data = buffer.strip()
+            self.publisher.publish(msg)
+
+        # Add assistant response to conversation history for context
+        self.messages.append({"role": "assistant", "content": all_text})
+
+        return all_text
+
 
 class StoryTellingNode(Node):
     """ROS2 Node to handle storytelling services."""
@@ -107,7 +133,12 @@ class StoryTellingNode(Node):
     def __init__(self):
         super().__init__('story_telling_node')
 
-        self.st = StoryTelling(self)  # Pass the node to StoryTelling
+        # Declare ROS2 parameter for the model (can be overridden at launch)
+        self.declare_parameter('model', 'gpt-4o-mini')
+        model = self.get_parameter('model').get_parameter_value().string_value
+
+        self.get_logger().info(f"Using OpenAI model: {model}")
+        self.st = StoryTelling(self, model)
 
         # Define services
         self.srv_setup_story = self.create_service(SetupStory, 'setup_story', self.handle_setup_story)
@@ -118,7 +149,10 @@ class StoryTellingNode(Node):
 
     def handle_setup_story(self, req, res):
         """Callback for the setup_story service."""
-        self.st.define_parameters(req.name, req.age, req.brain, req.hobbies, req.profession, req.family, req.theme, req.forbidden_topics)
+        self.st.define_parameters(
+            req.name, req.age, req.brain, req.hobbies,
+            req.profession, req.family, req.theme, req.forbidden_topics
+        )
         res.success = True
         return res
 
