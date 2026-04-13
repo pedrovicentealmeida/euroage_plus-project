@@ -96,16 +96,16 @@ export OPENAI_API_KEY="your_api_key_here"
 You can list all available OpenAI models directly from the terminal:
 
 ```bash
-curl https://api.openai.com/v1/models \
-  -H "Authorization: Bearer YOUR_API_KEY" | jq -r '.data[].id'
+python3 -c "
+import openai
+client = openai.OpenAI(api_key='SUA_CHAVE_AQUI')
+models = [m.id for m in client.models.list() if 'gpt' in m.id]
+models.sort()
+for m in models:
+    print(m)
+"
 ```
 
-If you do not have `jq` installed:
-
-```bash
-curl https://api.openai.com/v1/models \
-  -H "Authorization: Bearer YOUR_API_KEY" | grep '"id"'
-```
 
 Note: Not all listed models may be available depending on your account permissions.
 
